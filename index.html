@@ -1,114 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>css selectors</title>
-    <style>
-        /* element selector  */
-        div {
-            background-color: rgb(186, 147, 147);
-        }
-
-
-        /* class selector= for specific element color */
-        .red {
-            background-color: rgb(135, 135, 216);
-        }
-
-        /* id selector */
-        #green {
-            background-color: red;
-        }
-
-        /* child selector*/
-
-        div>p {
-            color: pink;
-            background-color: rgb(9, 255, 0);
-        }
-
-
-        /* descendentselectors */
-        div p { 
-            color: rgb(200, 22, 228);
-            background-color: rgb(0, 55, 255);
-        } 
-
-        /* universal selector */
-        * {
-            margin: 10px;
-            ;
-            padding: 5px;
-            /* color:aqua; */
-        }
-
-        /* pseudo selector */
-        a:visited {
-            color: green;
-        }
-
-        a:link {
-            color: rgb(136, 14, 14);
-        }
-
-        a:active {
-            background-color: rgb(0, 8, 255);
-        }
-
-        a:hover {
-            background-color: rgb(226, 19, 216);
-        }
-
-        p:first-child {
-            color: rgb(29, 138, 228);
-        }
-        div>span{
-            color: rgb(122, 21, 21);
-        }
-    </style>
+    <title>Chess Game</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    <div>
-    <main>
-        <p>i'm a selector</p>
-        <p>i'm a second child</p>
-        <p>i'm the 3^rd</p>
-    </main>
-    </div>
-    <div class="red">
-        i'm a div block element
-        <p>i'm a para</p>
-        <div><p>i'm doing coding</p></div>
-        <p><span>i'm doing coding my lovely</span></p>
-        <section><p>kanchan</p><section>
-    </div>
-    <div class="red">
-        i'm a div block element
-        <article>
-            <p>i'm a para</p>
-            <span>hii i'm testing</span>
-        </article>
-    </div>
-    <div>the prlm is we both getting same color so use .classname</div>
-    <div id="green">the prblm = use .id </div>
-    <div>
-        <a href="https://www.google.com">go to google</a>
-        <div>
-            <a href="https://www.facebook.com">go to facebook</a>
-        </div>
-        <a href="https://www.facebook2.com">go to facebook</a>
-    </div >
-    
-    <a href="https://www.facebook3.com">go to facebook</a></div>
-
-
-
-
-
-
+    <h1>Chess Game</h1>
+    <table id="chessboard"></table>
+    <script src="script.js"></script>
 </body>
-
 </html>

@@ -73,14 +73,21 @@ const GameBoard = ({ game, onMove }) => {
     const fileIndex = file.charCodeAt(0) - 97;
     const rankIndex = 8 - parseInt(rank);
     const isWhite = piece.startsWith('w');
+    const direction = isWhite ? -1 : 1;
+
+    // Helper function to check if a position is within the board
+    const isWithinBoard = (f, r) => f >= 0 && f < 8 && r >= 0 && r < 8;
+
+    // Helper function to check if a square is empty or contains an enemy piece
+    const isValidTarget = (targetPiece) => {
+      return !targetPiece || (targetPiece && targetPiece.startsWith(isWhite ? 'b' : 'w'));
+    };
 
     // Pawn movement
     if (piece.endsWith('P')) {
-      const direction = isWhite ? -1 : 1;
-      const nextRank = rankIndex + direction;
-      
       // Forward move
-      if (nextRank >= 0 && nextRank < 8) {
+      const nextRank = rankIndex + direction;
+      if (isWithinBoard(fileIndex, nextRank)) {
         const nextPosition = `${file}${8 - nextRank}`;
         if (!boardState[nextPosition]) {
           moves.push(nextPosition);
@@ -96,10 +103,11 @@ const GameBoard = ({ game, onMove }) => {
       }
 
       // Diagonal captures
-      const captureFiles = [fileIndex - 1, fileIndex + 1];
-      captureFiles.forEach(captureFile => {
-        if (captureFile >= 0 && captureFile < 8) {
-          const capturePosition = `${String.fromCharCode(97 + captureFile)}${8 - nextRank}`;
+      [-1, 1].forEach(offset => {
+        const captureFile = fileIndex + offset;
+        const captureRank = rankIndex + direction;
+        if (isWithinBoard(captureFile, captureRank)) {
+          const capturePosition = `${String.fromCharCode(97 + captureFile)}${8 - captureRank}`;
           const targetPiece = boardState[capturePosition];
           if (targetPiece && targetPiece.startsWith(isWhite ? 'b' : 'w')) {
             moves.push(capturePosition);
@@ -114,17 +122,13 @@ const GameBoard = ({ game, onMove }) => {
       directions.forEach(([dx, dy]) => {
         let x = fileIndex + dx;
         let y = rankIndex + dy;
-        while (x >= 0 && x < 8 && y >= 0 && y < 8) {
+        while (isWithinBoard(x, y)) {
           const targetPosition = `${String.fromCharCode(97 + x)}${8 - y}`;
           const targetPiece = boardState[targetPosition];
-          if (!targetPiece) {
+          if (isValidTarget(targetPiece)) {
             moves.push(targetPosition);
-          } else {
-            if (targetPiece.startsWith(isWhite ? 'b' : 'w')) {
-              moves.push(targetPosition);
-            }
-            break;
           }
+          if (targetPiece) break;
           x += dx;
           y += dy;
         }
@@ -137,17 +141,13 @@ const GameBoard = ({ game, onMove }) => {
       directions.forEach(([dx, dy]) => {
         let x = fileIndex + dx;
         let y = rankIndex + dy;
-        while (x >= 0 && x < 8 && y >= 0 && y < 8) {
+        while (isWithinBoard(x, y)) {
           const targetPosition = `${String.fromCharCode(97 + x)}${8 - y}`;
           const targetPiece = boardState[targetPosition];
-          if (!targetPiece) {
+          if (isValidTarget(targetPiece)) {
             moves.push(targetPosition);
-          } else {
-            if (targetPiece.startsWith(isWhite ? 'b' : 'w')) {
-              moves.push(targetPosition);
-            }
-            break;
           }
+          if (targetPiece) break;
           x += dx;
           y += dy;
         }
@@ -160,17 +160,13 @@ const GameBoard = ({ game, onMove }) => {
       directions.forEach(([dx, dy]) => {
         let x = fileIndex + dx;
         let y = rankIndex + dy;
-        while (x >= 0 && x < 8 && y >= 0 && y < 8) {
+        while (isWithinBoard(x, y)) {
           const targetPosition = `${String.fromCharCode(97 + x)}${8 - y}`;
           const targetPiece = boardState[targetPosition];
-          if (!targetPiece) {
+          if (isValidTarget(targetPiece)) {
             moves.push(targetPosition);
-          } else {
-            if (targetPiece.startsWith(isWhite ? 'b' : 'w')) {
-              moves.push(targetPosition);
-            }
-            break;
           }
+          if (targetPiece) break;
           x += dx;
           y += dy;
         }
@@ -183,10 +179,10 @@ const GameBoard = ({ game, onMove }) => {
       directions.forEach(([dx, dy]) => {
         const x = fileIndex + dx;
         const y = rankIndex + dy;
-        if (x >= 0 && x < 8 && y >= 0 && y < 8) {
+        if (isWithinBoard(x, y)) {
           const targetPosition = `${String.fromCharCode(97 + x)}${8 - y}`;
           const targetPiece = boardState[targetPosition];
-          if (!targetPiece || targetPiece.startsWith(isWhite ? 'b' : 'w')) {
+          if (isValidTarget(targetPiece)) {
             moves.push(targetPosition);
           }
         }
@@ -195,17 +191,17 @@ const GameBoard = ({ game, onMove }) => {
 
     // Knight movement
     if (piece.endsWith('N')) {
-      const moves = [
+      const knightMoves = [
         [2, 1], [2, -1], [-2, 1], [-2, -1],
         [1, 2], [1, -2], [-1, 2], [-1, -2]
       ];
-      moves.forEach(([dx, dy]) => {
+      knightMoves.forEach(([dx, dy]) => {
         const x = fileIndex + dx;
         const y = rankIndex + dy;
-        if (x >= 0 && x < 8 && y >= 0 && y < 8) {
+        if (isWithinBoard(x, y)) {
           const targetPosition = `${String.fromCharCode(97 + x)}${8 - y}`;
           const targetPiece = boardState[targetPosition];
-          if (!targetPiece || targetPiece.startsWith(isWhite ? 'b' : 'w')) {
+          if (isValidTarget(targetPiece)) {
             moves.push(targetPosition);
           }
         }

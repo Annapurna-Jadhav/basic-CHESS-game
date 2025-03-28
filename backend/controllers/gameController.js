@@ -3,15 +3,48 @@ import Game from '../models/Game.js';
 // Create a new game
 export const createGame = async (req, res) => {
   try {
+    console.log('Creating new game with data:', req.body);
     const { whitePlayer, blackPlayer } = req.body;
+
+    if (!whitePlayer || !blackPlayer) {
+      console.log('Missing player names');
+      return res.status(400).json({ 
+        message: 'Both white and black player names are required' 
+      });
+    }
+
     const game = new Game({
-      whitePlayer,
-      blackPlayer
+      whitePlayer: whitePlayer.trim(),
+      blackPlayer: blackPlayer.trim()
     });
-    await game.save();
-    res.status(201).json(game);
+
+    console.log('Saving game to database...');
+    const savedGame = await game.save();
+    console.log('Game saved successfully:', savedGame);
+    
+    res.status(201).json(savedGame);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error creating game:', error);
+    res.status(500).json({ 
+      message: 'Failed to create game',
+      error: error.message 
+    });
+  }
+};
+
+// Clear all games
+export const clearHistory = async (req, res) => {
+  try {
+    console.log('Clearing all games...');
+    await Game.deleteMany({});
+    console.log('All games cleared successfully');
+    res.json({ message: 'All games cleared successfully' });
+  } catch (error) {
+    console.error('Error clearing games:', error);
+    res.status(500).json({ 
+      message: 'Failed to clear games',
+      error: error.message 
+    });
   }
 };
 
